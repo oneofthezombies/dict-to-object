@@ -1,8 +1,9 @@
 import setuptools
 
+
 setuptools.setup(
     name="dict-to-object",
-    version="1.0.1",
+    version="1.0.2",
     license='MIT',
     author="oneofthezombies",
     author_email="hunhoekim@gmail.com",

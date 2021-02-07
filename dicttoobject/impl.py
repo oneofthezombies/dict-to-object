@@ -18,20 +18,22 @@ class ReadOnlyObject(SimpleNamespace):
         raise DoNotWriteError(attr_name, attr_value)
 
 
-class DictionaryObjectConverter:
-    def __init__(self, readonly=False):
+class DictionaryToObjectConverter:
+    def __init__(self, readonly):
         self.obj_class = ReadOnlyObject if readonly else WritableObject
-    
-    def dict_to_object(self, dct: dict):
+
+    def __call__(self, dct: dict):
         copied: dict = deepcopy(dct)
         for key, value in copied.items():
             if isinstance(value, dict):
-                copied[key] = self.dict_to_object(value)
+                copied[key] = self(value)
         return self.obj_class(**copied)
 
-    def object_to_dict(self, obj) -> dict:
+
+class ObjectToDictionaryConverter:
+    def __call__(self, obj) -> dict:
         copied: dict = deepcopy(obj.__dict__)
         for key, value in copied.items():
             if isinstance(value, SimpleNamespace):
-                copied[key] = self.object_to_dict(value)
+                copied[key] = self(value)
         return copied
