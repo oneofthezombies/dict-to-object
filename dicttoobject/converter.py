@@ -1,26 +1,11 @@
 from types import SimpleNamespace
 from copy import deepcopy
-
-
-class DoNotWriteError(Exception):
-    def __init__(self, attr_name: str, attr_value):
-        super().__init__(f'do not write to read only attribute [{attr_name}], value [{attr_value}].')
-        self.attr_name = attr_name
-        self.attr_value = deepcopy(attr_value)
-
-
-class WritableObject(SimpleNamespace):
-    pass        
-
-
-class ReadOnlyObject(SimpleNamespace):
-    def __setattr__(self, attr_name, attr_value):
-        raise DoNotWriteError(attr_name, attr_value)
+from . import type as ty
 
 
 class DictionaryToObjectConverter:
     def __init__(self, readonly):
-        self.obj_class = ReadOnlyObject if readonly else WritableObject
+        self.obj_class = ty.ReadOnlyObject if readonly else ty.WritableObject
 
     def __call__(self, dct: dict):
         copied: dict = deepcopy(dct)
@@ -28,6 +13,16 @@ class DictionaryToObjectConverter:
             if isinstance(value, dict):
                 copied[key] = self(value)
         return self.obj_class(**copied)
+
+
+class DictionaryToReadOnlyObjectConverter(DictionaryToObjectConverter):
+    def __init__(self):
+        super().__init__(True)
+
+
+class DictionaryToWritableObjectConverter(DictionaryToObjectConverter):
+    def __init__(self):
+        super().__init__(False)
 
 
 class ObjectToDictionaryConverter:

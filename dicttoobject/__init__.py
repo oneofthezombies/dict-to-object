@@ -1,7 +1,15 @@
-from . import impl
+from . import (
+    error,
+    type,
+    converter
+)
 
 
-DoNotWriteError = impl.DoNotWriteError
-dict_to_readonly_object = impl.DictionaryToObjectConverter(readonly=True)
-dict_to_writable_object = impl.DictionaryToObjectConverter(readonly=False)
-object_to_dict = impl.ObjectToDictionaryConverter()
+DoNotWriteError = error.DoNotWriteError
+
+WritableObject = type.WritableObject
+ReadOnlyObject = type.ReadOnlyObject
+
+dict_to_readonly_object = converter.DictionaryToReadOnlyObjectConverter()
+dict_to_writable_object = converter.DictionaryToWritableObjectConverter()
+object_to_dict = converter.ObjectToDictionaryConverter()
