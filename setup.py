@@ -9,6 +9,7 @@ setuptools.setup(
     author_email="hunhoekim@gmail.com",
     description="python dictionary to object.",
     long_description=open('README.md').read(),
+    long_description_content_type = 'text/markdown',
     url="https://github.com/oneofthezombies/dict-to-object",
     packages=setuptools.find_packages(),
     classifiers=[
