@@ -1,6 +1,6 @@
 # dict-to-object
 
-```
+```python
 import dicttoobject
 
 test_dict = {
